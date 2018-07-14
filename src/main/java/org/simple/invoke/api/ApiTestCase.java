@@ -24,7 +24,12 @@ public class ApiTestCase implements TestCase {
     public ApiTestCase(AppConfig.Api api) {
         this.api = api;
         try {
-            Class clz = getApiClassLoader(api.getApiClassPath()).loadClass(api.getClassName());
+            Class clz;
+            if (api.getApiClassPath() != null) {
+                clz = getApiClassLoader(api.getApiClassPath()).loadClass(api.getClassName());
+            }else{
+                clz = ClassLoader.getSystemClassLoader().loadClass(api.getClassName());
+            }
             this.testApi = (TestApi) clz.newInstance();
         } catch (Exception e) {
             logger.error("create ApiTestCase occur an error with className={}, system exit! ", api.getClassName(), e);

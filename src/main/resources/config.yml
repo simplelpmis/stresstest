@@ -4,16 +4,16 @@ requestCount: 100
 
 #api测试配置
 api:
-  apiClassPath: C:\javaSourceCode\testapi\target
+#  apiClassPath: C:\javaSourceCode\testapi\target
 #  className: org.simple.invoke.api.DefaultTestApi
-  className: org.simple.App
-  args: hello
+#  className: org.simple.App
+#  args: hello
 
 #http测试配置
 http:
-#  url: http://localhost:18888/system/role/list
-#  method: get
+  url: http://10.168.1.97:18890/monitor/config
+  method: get
 #  args: "{\"userCode\":\"admin\",\"password\":\"admin\"}"
-#  successResult: "{\"code\":0"
+  successResult: "CommonRespHead{resultCode=7, respBodyBytes=null}"
 ##  successResult: "{\"code\":0,\"msg\":null,\"data\":null}"
-#  contain: true
+  contain: false

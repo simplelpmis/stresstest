@@ -9,6 +9,8 @@ import org.simple.invoke.TestCase;
  */
 public class HttpTestCase implements TestCase {
 
+    private static final String POST_METHOD = "post";
+
     private boolean isPostMethod;
     private String url;
     private String params;
@@ -16,7 +18,7 @@ public class HttpTestCase implements TestCase {
     private boolean isContain;
 
     public HttpTestCase(AppConfig.Http http) {
-        if (HttpHelper.POST_METHOD.equalsIgnoreCase(http.getMethod())) {
+        if (POST_METHOD.equalsIgnoreCase(http.getMethod())) {
             this.isPostMethod = true;
         }
         this.url = http.getUrl();
@@ -29,11 +31,10 @@ public class HttpTestCase implements TestCase {
     public boolean execute() {
         String result;
         if (isPostMethod) {
-            result = HttpHelper.doPost(url, params);
+            result = OkHttpUtil.postJson(url, params);
         } else {
-            result = HttpHelper.doGet(url);
+            result = OkHttpUtil.get(url);
         }
-//        System.out.println(result);
         if (!isContain) {
             if (successResult.equals(result)) {
                 return true;

@@ -24,8 +24,10 @@ public class Main {
     private final static Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
+        // load config
         AppConfig config = AppConfigUtil.getAppConfig();
 
+        // prepare task and data
         CyclicBarrier cb = new CyclicBarrier(config.getThreadCount());
         CountDownLatch cdl = new CountDownLatch(config.getThreadCount());
 
@@ -36,12 +38,17 @@ public class Main {
 
         ExecutorService executor = Executors.newFixedThreadPool(config.getThreadCount());
 
+        // execute
+        logger.info("successfully prepare test data with config={}", config);
         long start = System.currentTimeMillis();
         List<Future<Long>> invokeList = executor.invokeAll(tasks);
         cdl.await();
-        executor.shutdown();
         long totalTime = System.currentTimeMillis() - start;
 
+        //clean up
+        executor.shutdown();
+
+        // statistic result
         List<Long> resultList = new ArrayList<>(config.getThreadCount());
         for (int i = 0; i < config.getThreadCount(); i++) {
             long taskResult = invokeList.get(i).get();
@@ -50,6 +57,6 @@ public class Main {
 
         List<BasicData> basicDataList = tasks.parallelStream().map(t -> t.getBasicData()).collect(Collectors.toList());
         CalculateData result = CalculateUtil.calData(config, totalTime, resultList, basicDataList);
-        logger.info("test result is {}", result.toSimpleString());
+        logger.info("finish test with result={}", result.toSimpleString());
     }
 }
